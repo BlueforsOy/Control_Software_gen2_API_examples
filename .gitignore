@@ -1,0 +1,12 @@
+# Python
+*.pyc
+.venv
+
+# Misc
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.lsp
+.idea
