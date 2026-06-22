@@ -6,6 +6,8 @@ The cooldown will be run through `cooldown.py`, which calls the other scripts
 
 The user must choose the phases they want to use, by calling them in the main function in the order they want. Any pauses will also have to be added here. 
 
+When using external API for DR system control, set the internal automation to Manual operation from the Control Software Gen. 2 Dashboard.
+
 ## Setup
 
 `configuration.py` is needed for configuration:
