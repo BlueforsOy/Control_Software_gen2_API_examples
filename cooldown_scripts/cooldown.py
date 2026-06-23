@@ -1,4 +1,5 @@
 """Cool a cryostat through the CS2 API."""
+
 import logging
 
 from functions import ErrorState
@@ -7,7 +8,6 @@ import pt_cooling
 import ppc_full
 import condensing
 import warm_system
-
 
 
 # This program runs the cooldown_scripts through the CS2 API, currently
@@ -82,11 +82,13 @@ def run_warm_system():
     except ErrorState:
         raise
 
+
 # The cooldown process is defined inside main() function. The following example
 # does a full cooldown, starting from evacuation of vacuum chamber
 
 # To perform warmup, comment out all phases except run_warm_system()
 # For the warmup, system is assumed to be in circulation mode (base temperature)
+
 
 def main():
     """Select the phases to run and which order to run them in."""
@@ -96,12 +98,12 @@ def main():
         run_pt_cooling()
         run_ppc()
         run_condensing()
-        #run_warm_system()
+        # run_warm_system()
     except ErrorState as err:
         print(err)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # set the connection to the CS2 API
     logging.basicConfig(level=logging.INFO)
 

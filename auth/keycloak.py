@@ -36,20 +36,27 @@ class KeycloakAuthClient:
 
     @cached_property
     def openid_auth_url(self):
-        return f"{self.server_url}/realms/{self.realm_name}/protocol/openid-connect/token"
+        return (
+            f"{self.server_url}/realms/{self.realm_name}/protocol/openid-connect/token"
+        )
 
     @cached_property
     def post_data(self):
-        return MappingProxyType({
-            "grant_type": "client_credentials",
-            "client_secret": self.client_secret_key,
-            "client_id": self.client_id,
-            "scope": "openid",
-        })
+        return MappingProxyType(
+            {
+                "grant_type": "client_credentials",
+                "client_secret": self.client_secret_key,
+                "client_id": self.client_id,
+                "scope": "openid",
+            }
+        )
 
     def _post(self, url, data):
         d = parse.urlencode(data)
-        res = request.urlopen(request.Request(url, method="POST", data=d.encode("utf-8"), headers={}), context=self.ssl_context)
+        res = request.urlopen(
+            request.Request(url, method="POST", data=d.encode("utf-8"), headers={}),
+            context=self.ssl_context,
+        )
         return json.load(res)
 
     @property
@@ -61,7 +68,8 @@ class KeycloakAuthClient:
             self.token_response = self._post(self.openid_auth_url, self.post_data)
             self.token = self.token_response["access_token"]
             self.expiry = datetime.now() + timedelta(
-                seconds=self.token_response.get("expires_in", 0) - self.TOKEN_EXPIRY_SAFETY_MARGIN_SECONDS
+                seconds=self.token_response.get("expires_in", 0)
+                - self.TOKEN_EXPIRY_SAFETY_MARGIN_SECONDS
             )
 
         return f"Bearer {self.token}"

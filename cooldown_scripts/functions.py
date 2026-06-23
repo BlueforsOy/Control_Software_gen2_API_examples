@@ -7,7 +7,15 @@ import logging
 import uuid
 from urllib import request, parse, error
 
-from configuration import CERT_PATH, CS2_API_URL, KEYCLOAK_CLIENT_ID, KEYCLOAK_CLIENT_SECRET, KEYCLOAK_REALM, KEYCLOAK_URL, USE_AUTH
+from configuration import (
+    CERT_PATH,
+    CS2_API_URL,
+    KEYCLOAK_CLIENT_ID,
+    KEYCLOAK_CLIENT_SECRET,
+    KEYCLOAK_REALM,
+    KEYCLOAK_URL,
+    USE_AUTH,
+)
 from keycloak_auth import KeycloakAuthClient, NoAuthClient
 
 log = logging.getLogger(__name__)
@@ -63,7 +71,7 @@ def _command(device_id, payload, command_id="command"):
             },
         )
     except error.HTTPError as e:
-        if e.code == 404: # handle calls to missing devices
+        if e.code == 404:  # handle calls to missing devices
             log.warning("Skipping %s: device not present", device_id)
             return None
         raise
@@ -157,7 +165,9 @@ def disable_fse():
 
 
 def fse_target(target_position):
-    _command("FSE", {"params": {"fTargetPosition": target_position}}, command_id="write")
+    _command(
+        "FSE", {"params": {"fTargetPosition": target_position}}, command_id="write"
+    )
 
 
 def fse_motor_start():
@@ -196,7 +206,7 @@ class Timer:
         return time.time() - self.start
 
     def __str__(self):
-        return f'Time elapsed: {time.time() - self.start} seconds'
+        return f"Time elapsed: {time.time() - self.start} seconds"
 
     def __gt__(self, other):
         return (time.time() - self.start) > other
