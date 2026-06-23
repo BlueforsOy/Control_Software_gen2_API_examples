@@ -6,7 +6,7 @@ Control Software 2. They are meant as examples, or a starting point for users
 to start implementing their own scripts. Most error handling, retry logic etc.
 is omitted for clarity.
 
-**Note: The examples use https://localhost as the CS2 base URL. On Windows, we
+**Note: Some examples use https://localhost as the CS2 base URL. On Windows, we
 have noticed that resolving localhost can sometimes be slow. In that case, you
 can try using https://127.0.0.1 instead.**
 
