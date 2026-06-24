@@ -218,7 +218,7 @@ with request.urlopen(req) as response:
 ```python
 import json
 import uuid
-from urllib import request
+from urllib import request, parse
 
 url = "https://localhost/api/v1"
 
@@ -246,4 +246,58 @@ req = request.Request(
 )
 with request.urlopen(req) as response:
     print(json.load(response))
+```
+
+### Fetching and plotting values
+Requires `matplotlib`.
+
+```python
+import datetime
+import json
+import time
+from urllib import request, parse
+
+import matplotlib.pyplot as plt
+
+#### Specify which device is searched for what time period
+device_id = "P3_PRESSURE"
+
+#### Use time format like "%Y-%m-%dT%H:%M:%S.%fZ"
+end_time = datetime.datetime.now()
+start_time = end_time - datetime.timedelta(days=7)
+time_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+#### Use the variables to form the API call
+query = parse.urlencode({
+    "from": start_time.strftime(time_format),
+    "to": end_time.strftime(time_format),
+    "format": "array",
+})
+req = request.Request(
+    f"{url}/events/values/{parse.quote(device_id)}?{query}",
+    headers=headers,
+    method="GET",
+)
+with request.urlopen(req) as r:
+    response = json.load(r)
+
+#### Fetch the correct values from the JSON-object
+temperatures = response["value"]
+datetime_strings = response["datetime"]
+
+#### Format the datetime objects correctly
+timestamps = []
+for dt in datetime_strings:
+    timestamps.append(datetime.datetime.strptime(dt, time_format))
+
+#### Plot the data
+fig, ax = plt.subplots()
+ax.plot(timestamps, temperatures)
+
+ax.set(
+    xlabel="datetime (s)",
+    ylabel="temperature (mK)",
+    title=f"Temperature of {device_id}",
+)
+plt.show()
 ```
