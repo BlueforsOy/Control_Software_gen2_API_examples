@@ -30,7 +30,7 @@ Create a new client under **Manage → Clients → Create client**.
 
 - Root URL and Home URL can be left empty
 
-After saving, go to the **Service account roles** tab, click **Assign role**, and assign the `INTERNAL` role from `cs2-resource-server`.
+After saving, go to the **Service account roles** tab, click **Assign role**, and assign the `INTERNAL` role from `cs2-resource-server`. Then add the 'READ_ONLY' role by selecting **Filter by Realm roles**.
 
 Then go to the **Credentials** tab to copy the generated client secret.
 
