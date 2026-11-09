@@ -25,7 +25,7 @@ from functions import (
     circulation_turbo_pumps_on,
     circulation_turbo_pumps_off,
 )
-from configuration import service_booster_pump_available
+from configuration import service_booster_pump_available, number_of_circulation_turbo_pumps
 
 initial_tank_pressure = (
     0.720  # How much mixture is in the system, given in configuration
@@ -316,7 +316,7 @@ def condensing_finalize():
     time.sleep(2)
 
     timer1.reset()
-    while value("P4_PRESSURE") > value("P3_PRESSURE"):
+    while value("P3_PRESSURE") > value("P4_PRESSURE"):
         time.sleep(2)
         log.info("Waiting for p3 to drop below p4")
         if timer1 > condensing_pressure_difference_max_time:
@@ -338,10 +338,19 @@ def condensing_finalize():
             raise ErrorState(error, error_message)
 
     circulation_turbo_pumps_on("TURBO_PUMP")
-    log.info("Wait 20 minutes before applying still heat")
-    time.sleep(1200)  # delay time to apply still heat
-
+    # Still heater power for the first 30 minutes depends on the number of circulation turbo pumps
+    if number_of_circulation_turbo_pumps == 2:
+        still_heater_power = 0.020
+    elif number_of_circulation_turbo_pumps >= 3:
+        still_heater_power = 0.030
+    else:
+        still_heater_power = 0.012
+    set_heater_power(("bftc-device-1", "3"), still_heater_power)
     heater_on(["STILL_HEATER"])
-    set_heater_power(("bftc-device-1", "3"), condensing_still_heating_power)
-
+    log.info(f"Condensing: Apply still heater power {still_heater_power * 1e3:.0f} mW for 30min")
+    try:
+        time.sleep(1800)
+    finally:
+        log.info("Condensing: Apply default still heater power")
+        set_heater_power(("bftc-device-1", "3"), condensing_still_heating_power)
     log.info("System cooling to base temperature")
