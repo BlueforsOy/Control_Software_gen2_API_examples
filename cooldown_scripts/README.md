@@ -15,6 +15,7 @@ When using external API for DR system control, set the internal automation to Ma
 - Use of authentication, related variables
 - SSL certificate path, if the certificate is not available through the system trust store
 - Define whether the service booster pump B2 (HIPace80) is in use or not.
+- Define the number of circulation turbo pumps B1 in your system (1-3)
 
 ## Cooldown Scripts
 All cooldown scripts are simply called by their name. Currently, the following phases have been written:

@@ -18,3 +18,4 @@ KEYCLOAK_CLIENT_SECRET = os.environ["CS2_CLIENT_SECRET"]
 
 
 service_booster_pump_available = False
+number_of_circulation_turbo_pumps = 1  # Configured B1 circulation turbo pumps (1-3), sets the still heater power in condensing
